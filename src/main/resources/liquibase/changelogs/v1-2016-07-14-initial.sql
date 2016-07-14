@@ -1,3 +1,6 @@
+--liquibase formatted SQL
+
+--changeset K.Bylino:v1
 CREATE TABLE account
 (
   id         VARCHAR(36) PRIMARY KEY,
