@@ -1,17 +1,46 @@
 package by.partymaker.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import by.partymaker.dto.EventDto;
+import by.partymaker.entities.Account;
+import by.partymaker.entities.Event;
+import by.partymaker.repositories.AccountRepository;
+import by.partymaker.repositories.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
- * Created by user on 14.07.2016.
+ * Created on 14.07.2016
+ * @author user
  */
 @RestController
-@RequestMapping("/api/oauth")
+@RequestMapping("/api")
 public class HelloController {
-    @RequestMapping(method = RequestMethod.GET)
-    public String getFacebookAccessToken() {
-        return "huii";
+    @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private EventRepository eventRepository;
+
+    @RequestMapping(method = RequestMethod.GET, path = "/accounts")
+    public Account getAccount() {
+        return accountRepository.findOne("1");
     }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/events")
+    public List<Event> getEvents() {
+        return eventRepository.findAll();
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "/events")
+    public void deleteEvent(@RequestParam String id) {
+        eventRepository.delete(id);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/events")
+    public void deleteEvent(@RequestBody EventDto eventDto) {
+
+        eventRepository.save(eventDto.getEntity(accountRepository.findOne("1")));
+    }
+
 }
